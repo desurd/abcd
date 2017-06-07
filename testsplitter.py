@@ -1,9 +1,14 @@
+# systeme class
 import sys
+
+# UI class
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
+
+# personnal class
 import rectangle_form
 import RenderAreaWidget
 
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
 
 class Example(QWidget):
     def __init__(self):
@@ -22,6 +27,8 @@ class Example(QWidget):
         splitterRadio.addWidget(self.radioBody)
         splitterRadio.addWidget(self.radioTail)
         splitterRadio.addWidget(self.radioNose)
+        self.sizeSlider = self.sliderCreation(min=0.25, max=3, value=5, interval=5)
+
         self.halfSize = QRadioButton("Half", self)
         self.normalSize = QRadioButton("Normal", self)
         self.doubleSize = QRadioButton("Double", self)
@@ -45,10 +52,14 @@ class Example(QWidget):
         splitterButton = QSplitter(Qt.Horizontal)
         splitterButton.addWidget(splitterRadio)
         splitterButton.addWidget(splitterRadio2)
+
         splitterButton2 = QSplitter(Qt.Horizontal)
         splitterButton2.addWidget(addButton)
         splitterButton2.addWidget(removeButton)
         splitterButton2.addWidget(saveButton)
+
+        sliderArea = QSplitter(Qt.Horizontal)
+        sliderArea.addWidget(self.sizeSlider)
 
         ###################### third try with QTextObjectInterface object
         # self.drawarea = QStackedWidget(self)
@@ -61,6 +72,7 @@ class Example(QWidget):
         self.textedit.setFixedSize(800, 200)
         splitter1.addWidget(splitterButton)
         splitter1.addWidget(splitterButton2)
+        splitter1.addWidget(sliderArea)
         splitter1.addWidget(self.textedit)
         #splitter1.addWidget(self.drawarea)
         splitter1.addWidget(self.renderArea)
@@ -78,6 +90,21 @@ class Example(QWidget):
         self.setGeometry(200, 200, 900, 900)
         self.setWindowTitle('QSplitter demo')
         self.show()
+
+    def sliderCreation(self, min=0.25, max=3, value=5, interval=5):
+        """define a slider with default values if parameter are not set"""
+        self.slider = QSlider(Qt.Horizontal)
+        self.slider.setMinimum(min)
+        self.slider.setMaximum(max)
+        self.slider.setValue(value)
+        self.slider.setTickPosition(QSlider.TicksBelow)
+        self.slider.setTickInterval(interval)
+        self.slider.valueChanged.connect(self.valuechange)
+        return self.slider
+
+    def valuechange(self):
+        size = self.slider.value()
+
 
     def finalSize(self, objectSize):
         """will define the new size of object in regard of """
