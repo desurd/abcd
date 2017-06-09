@@ -1,9 +1,17 @@
 {
     "origin": [
-        10, 
-        10
+        469, 
+        109
     ], 
-    "width": 40, 
+    "width": 70, 
     "name": "rectangle", 
     "height": 60
+}{
+    "origin": [
+        271, 
+        278
+    ], 
+    "width": 140, 
+    "name": "rectangle", 
+    "height": 120
 }

@@ -27,7 +27,7 @@ class Example(QWidget):
         splitterRadio.addWidget(self.radioBody)
         splitterRadio.addWidget(self.radioTail)
         splitterRadio.addWidget(self.radioNose)
-        self.sizeSlider = self.sliderCreation(min=0.25, max=3, value=5, interval=5)
+        self.sizeSlider = self.sliderCreation(min=0.5, max=3, value=1, interval=0.5)
 
         self.halfSize = QRadioButton("Half", self)
         self.normalSize = QRadioButton("Normal", self)
@@ -72,6 +72,7 @@ class Example(QWidget):
         self.textedit.setFixedSize(800, 200)
         splitter1.addWidget(splitterButton)
         splitter1.addWidget(splitterButton2)
+        splitter1.addWidget(QLabel('Size Coefficient: '))
         splitter1.addWidget(sliderArea)
         splitter1.addWidget(self.textedit)
         #splitter1.addWidget(self.drawarea)
@@ -91,7 +92,7 @@ class Example(QWidget):
         self.setWindowTitle('QSplitter demo')
         self.show()
 
-    def sliderCreation(self, min=0.25, max=3, value=5, interval=5):
+    def sliderCreation(self, min, max, value, interval):
         """define a slider with default values if parameter are not set"""
         self.slider = QSlider(Qt.Horizontal)
         self.slider.setMinimum(min)
@@ -99,27 +100,35 @@ class Example(QWidget):
         self.slider.setValue(value)
         self.slider.setTickPosition(QSlider.TicksBelow)
         self.slider.setTickInterval(interval)
-        self.slider.valueChanged.connect(self.valuechange)
+        self.slider.valueChanged.connect(self.valueChange)
         return self.slider
 
-    def valuechange(self):
-        size = self.slider.value()
+    def valueChange(self):
+        sliderCoef = self.slider.value()
+        self.textedit.append("inside of slider: " + str(sliderCoef))
+        return sliderCoef
 
 
     def finalSize(self, objectSize):
         """will define the new size of object in regard of """
-        if self.halfSize.isChecked() == True:
-            coef = 0.5
-        if self.normalSize.isChecked() == True:
-            coef = 1
-        if self.doubleSize.isChecked() == True:
-            coef = 2
+        # list will be used to copy the list and not to refer at the same list
+        modifiedSize = list(objectSize)
+
+        #self.textedit.append("value of slider bar in final size" + str(userCoef))
+        self.textedit.append("value of slider bar in final size" + str(self.valueChange()))
+        # temporary removed
+        #if self.halfSize.isChecked() == True:
+        #    coef = 0.5
+        #if self.normalSize.isChecked() == True:
+        #    coef = 1
+        #if self.doubleSize.isChecked() == True:
+        #    coef = 2
         try:
             for i in xrange(len(objectSize)):
-                objectSize[i]= objectSize[i]*coef
-            return objectSize
+                modifiedSize[i]= modifiedSize[i] * (self.valueChange())
+            return modifiedSize
         except:
-            print ('function finalSizen, parameter objectSize not a list')
+            print ('function finalSize, parameter objectSize not a list')
 
 
     def addButtonFunc(self):
@@ -146,7 +155,7 @@ class Example(QWidget):
     def saveButtonFunc(self):
         """action started after the press of add button"""
         print ("inside of the saveButton function")
-        # picklesave(renderArea
+        self.renderArea.toJson()
 
     def removeButtonFunc(self):
         """action started after the press of add button"""

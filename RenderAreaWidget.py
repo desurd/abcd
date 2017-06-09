@@ -86,8 +86,9 @@ class RenderArea(QtGui.QWidget):
                     currentShape['height'] = shape._height
                     json.dump(currentShape, f, indent = 4)
                 if shape._name == "circle":
+                    currentShape['name'] = shape._name
                     print("circle save to do")
-        fileName.close()
+        f.close()
 
 def main():
     app = QtGui.QApplication(sys.argv)
