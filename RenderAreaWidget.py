@@ -63,7 +63,6 @@ class RenderArea(QtGui.QWidget):
     def mouseReleaseEvent(self, event):
         self.__selected = None
 
-
     #def filePresent(self, fileName):
     #    try:
     #        if os.path.exist(fileName):
@@ -73,22 +72,38 @@ class RenderArea(QtGui.QWidget):
     #        print ("json file does not exist, creation to do")
     #        return False
 
+    def finalDataShape(self, predatashape, tojson, currentIndex):
+        """goal: finalize the shape data before to save it in the json file """
+        temp = {}
+        posElement = 'element' + str(currentIndex)
+        # copy of dictionnary
+        temp[posElement] = predatashape.copy()
+        locationValue = predatashape['location']
+        if locationValue not in tojson.keys():
+            tojson[locationValue]= []
+            tojson[locationValue].append(temp)
+        else:
+            tojson[locationValue].append(temp)
+        return tojson
+
     def toJson(self):
         """will save the different elements present in __shape to a json files"""
         fileName= "first_save.json"
+        tojson = {}
+        # add a test if the file exist or not
+        # if exist add a different opening file to append more data
         with open(fileName, 'w') as f:
+            currentIndex = 0
             for shape in self.__shapes:
-                currentShape = {}
-                if shape._name == "rectangle":
-                    currentShape['name'] = shape._name
-                    currentShape['origin'] = shape._origin
-                    currentShape['width'] = shape._width
-                    currentShape['height'] = shape._height
-                    json.dump(currentShape, f, indent = 4)
-                if shape._name == "circle":
-                    currentShape['name'] = shape._name
-                    print("circle save to do")
+                predatashape = shape.predataShape()
+                tojson = self.finalDataShape(predatashape, tojson, currentIndex)
+                currentIndex = currentIndex + 1
+
+            json.dump(tojson, f, indent=4)
         f.close()
+
+    def jsonToLoad(self):
+        """load a json file to the renderarea"""
 
 def main():
     app = QtGui.QApplication(sys.argv)

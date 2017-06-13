@@ -29,13 +29,13 @@ class Example(QWidget):
         splitterRadio.addWidget(self.radioNose)
         self.sizeSlider = self.sliderCreation(min=0.5, max=3, value=1, interval=0.5)
 
-        self.halfSize = QRadioButton("Half", self)
-        self.normalSize = QRadioButton("Normal", self)
-        self.doubleSize = QRadioButton("Double", self)
-        splitterRadio2 = QSplitter(Qt.Horizontal)
-        splitterRadio2.addWidget(self.halfSize)
-        splitterRadio2.addWidget(self.normalSize)
-        splitterRadio2.addWidget(self.doubleSize)
+        #self.halfSize = QRadioButton("Half", self)
+        #self.normalSize = QRadioButton("Normal", self)
+        #self.doubleSize = QRadioButton("Double", self)
+        #splitterRadio2 = QSplitter(Qt.Horizontal)
+        #splitterRadio2.addWidget(self.halfSize)
+        #splitterRadio2.addWidget(self.normalSize)
+        #splitterRadio2.addWidget(self.doubleSize)
 
         # button definition and associated splitter
         addButton = QPushButton('Add', self)
@@ -51,7 +51,7 @@ class Example(QWidget):
 
         splitterButton = QSplitter(Qt.Horizontal)
         splitterButton.addWidget(splitterRadio)
-        splitterButton.addWidget(splitterRadio2)
+        #splitterButton.addWidget(splitterRadio2)
 
         splitterButton2 = QSplitter(Qt.Horizontal)
         splitterButton2.addWidget(addButton)
@@ -114,8 +114,8 @@ class Example(QWidget):
         # list will be used to copy the list and not to refer at the same list
         modifiedSize = list(objectSize)
 
-        #self.textedit.append("value of slider bar in final size" + str(userCoef))
-        self.textedit.append("value of slider bar in final size" + str(self.valueChange()))
+        # self.textedit.append("value of slider bar in final size" + str(userCoef))
+        # self.textedit.append("value of slider bar in final size" + str(self.valueChange()))
         # temporary removed
         #if self.halfSize.isChecked() == True:
         #    coef = 0.5
@@ -137,14 +137,14 @@ class Example(QWidget):
         if (self.radioBody.isChecked() == True):
             print 'in radio body selection'
             appliedSize = self.finalSize(self.__bodySize)
-            self.rectAdd = rectangle_form.RectangleForm(appliedSize[0], appliedSize[1], appliedSize[2], appliedSize[3], QColor(255, 0, 0))
             partShape = "Body"
+            self.rectAdd = rectangle_form.RectangleForm(appliedSize[0], appliedSize[1], appliedSize[2], appliedSize[3], partShape, QColor(255, 0, 0))
         if (self.radioNose.isChecked() == True):
-            self.rectAdd = rectangle_form.RectangleForm(10, 10, 40 , 60, QColor(255, 255, 0))
             partShape = "Nose"
+            self.rectAdd = rectangle_form.RectangleForm(10, 10, 40 , 60, partShape, QColor(255, 255, 0))
         if (self.radioTail.isChecked() == True):
-            self.rectAdd = rectangle_form.RectangleForm(10, 10, 50 , 50, QColor(0, 0, 255))
             partShape = "Tail"
+            self.rectAdd = rectangle_form.RectangleForm(10, 10, 50 , 50, partShape, QColor(0, 0, 255))
         rectAddTex = "a new rectangle form: %s" % (partShape)
         self.renderArea.addShape(self.rectAdd)
         self.textedit.append(rectAddTex)

@@ -9,6 +9,7 @@ class FormInterface(QtGui.QWidget):
         super(FormInterface, self).__init__()
         self._origin = None
         self._color = color
+        self._predatashape = {}
 
     ##############
     # painter definition
@@ -36,6 +37,15 @@ class FormInterface(QtGui.QWidget):
     @property
     def origin(self):
         return self._origin
+
+
+    def className(self):
+        """will return the name of the clase"""
+        raise NotImplementedError()
+
+    def predataShape(self):
+        """goal: define the different parameter of the shape in one dictionnary"""
+        raise NotImplementedError()
 
 
     ################
