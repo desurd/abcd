@@ -1,6 +1,8 @@
 import sys
+import abc
 from PyQt4 import QtGui, QtCore
 
+#from abc_base import FormInterface
 from abcdforminterface import FormInterface
 
 class RectangleForm(FormInterface):
@@ -9,6 +11,7 @@ class RectangleForm(FormInterface):
         FormInterface.__init__(self, color)
         self.define(x1, y1, width, height, location)
 
+    @property
     def className(self):
         """will return the name of the clase"""
         namevalue = self.__class__.__name__
@@ -23,7 +26,7 @@ class RectangleForm(FormInterface):
         :param height:
         :param location
         """
-        self._name = self.className()
+        self._name = self.className
         self._origin = (x1, y1)
         self._width = width
         self._height = height

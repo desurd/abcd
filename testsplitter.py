@@ -1,5 +1,6 @@
 # systeme class
 import sys
+import logging
 
 # UI class
 from PyQt4.QtGui import *
@@ -114,21 +115,15 @@ class Example(QWidget):
         # list will be used to copy the list and not to refer at the same list
         modifiedSize = list(objectSize)
 
-        # self.textedit.append("value of slider bar in final size" + str(userCoef))
-        # self.textedit.append("value of slider bar in final size" + str(self.valueChange()))
-        # temporary removed
-        #if self.halfSize.isChecked() == True:
-        #    coef = 0.5
-        #if self.normalSize.isChecked() == True:
-        #    coef = 1
-        #if self.doubleSize.isChecked() == True:
-        #    coef = 2
         try:
-            for i in xrange(len(objectSize)):
-                modifiedSize[i]= modifiedSize[i] * (self.valueChange())
+            vc = self.valueChange()
+            modifiedSize = [o * vc for o in objectSize]
             return modifiedSize
         except:
-            print ('function finalSize, parameter objectSize not a list')
+            # configuration of the log file name
+            #logFileName = 'Validation_%s.log' % time.strftime('%y%m%d', time.localtime(time.time()))
+
+            logging.exception("function finalSize, parameter objectSize not a list")
 
 
     def addButtonFunc(self):

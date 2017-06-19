@@ -1,17 +1,54 @@
 {
-    "origin": [
-        469, 
-        109
+    "Body": [
+        {
+            "element0": {
+                "origin": [
+                    10, 
+                    10
+                ], 
+                "width": 70, 
+                "location": "Body", 
+                "name": "RectangleForm", 
+                "height": 60
+            }
+        }, 
+        {
+            "element1": {
+                "origin": [
+                    10, 
+                    10
+                ], 
+                "width": 70, 
+                "location": "Body", 
+                "name": "RectangleForm", 
+                "height": 60
+            }
+        }
     ], 
-    "width": 70, 
-    "name": "rectangle", 
-    "height": 60
-}{
-    "origin": [
-        271, 
-        278
-    ], 
-    "width": 140, 
-    "name": "rectangle", 
-    "height": 120
+    "Tail": [
+        {
+            "element2": {
+                "origin": [
+                    10, 
+                    10
+                ], 
+                "width": 50, 
+                "location": "Tail", 
+                "name": "RectangleForm", 
+                "height": 50
+            }
+        }, 
+        {
+            "element3": {
+                "origin": [
+                    10, 
+                    10
+                ], 
+                "width": 50, 
+                "location": "Tail", 
+                "name": "RectangleForm", 
+                "height": 50
+            }
+        }
+    ]
 }

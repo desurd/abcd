@@ -20,20 +20,20 @@ class RenderArea(QtGui.QWidget):
         self.__palette= self.palette()
         self.__palette.setColor(self.backgroundRole(), QtGui.QColor('white'))
         self.__painter = None
-        self.__shapes = []
-        self.__selected = None
+        self._shapes = []
+        self._selected = None
         self.createUI()
 
     def addShape(self, shape):
-        self.__shapes.append(shape)
+        self._shapes.append(shape)
 
     def paintEvent(self, event):
-        if self.__shapes:
+        if self._shapes:
             if self.__painter is None:
                 self.__painter = QtGui.QPainter(self)
 
             self.__painter.begin(self)
-            for shape in self.__shapes:
+            for shape in self._shapes:
                 shape.createForm(self.__painter)
             self.__painter.end()
 
@@ -46,31 +46,22 @@ class RenderArea(QtGui.QWidget):
 
 
     def mousePressEvent(self, event):
-        self.__selected = None
+        self._selected = None
         pos = event.pos()
-        for shape in self.__shapes:
+        for shape in self._shapes:
             if shape.isOver(pos.x(), pos.y()):
-                self.__selected = abcdforminterface.Selection(shape, pos)
+                self._selected = abcdforminterface.Selection(shape, pos)
                 break
 
     def mouseMoveEvent(self, event):
-        if self.__selected is None:
+        if self._selected is None:
             return
 
-        self.__selected.move(event.pos())
+        self._selected.move(event.pos())
         self.update()
 
     def mouseReleaseEvent(self, event):
-        self.__selected = None
-
-    #def filePresent(self, fileName):
-    #    try:
-    #        if os.path.exist(fileName):
-    #            print ("print file present - can be used")
-    #            return True
-    #    except:
-    #        print ("json file does not exist, creation to do")
-    #        return False
+        self._selected = None
 
     def finalDataShape(self, predatashape, tojson, currentIndex):
         """goal: finalize the shape data before to save it in the json file """
@@ -80,8 +71,7 @@ class RenderArea(QtGui.QWidget):
         temp[posElement] = predatashape.copy()
         locationValue = predatashape['location']
         if locationValue not in tojson.keys():
-            tojson[locationValue]= []
-            tojson[locationValue].append(temp)
+            tojson[locationValue]= [temp]
         else:
             tojson[locationValue].append(temp)
         return tojson
@@ -94,7 +84,7 @@ class RenderArea(QtGui.QWidget):
         # if exist add a different opening file to append more data
         with open(fileName, 'w') as f:
             currentIndex = 0
-            for shape in self.__shapes:
+            for shape in self._shapes:
                 predatashape = shape.predataShape()
                 tojson = self.finalDataShape(predatashape, tojson, currentIndex)
                 currentIndex = currentIndex + 1

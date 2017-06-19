@@ -1,5 +1,7 @@
 import sys
+import abc
 from PyQt4 import QtGui, QtCore
+
 
 from abcdforminterface import FormInterface
 
@@ -14,7 +16,7 @@ class CircleForm(FormInterface):
     # define origine of circle
     ################
     def define(self, x1, y1, rx, ry):
-        self._name = self.className()
+        self._name = self.className
         self._origin = (x1, y1)
         self._rx = rx
         self._ry = ry
@@ -32,6 +34,7 @@ class CircleForm(FormInterface):
     def move(self, x, y):
         self._origin = (x, y)
 
+    @property
     def className(self):
         """will return the name of the clase"""
         namevalue = self.__class__.__name__
