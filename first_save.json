@@ -1,0 +1,54 @@
+{
+    "Body": [
+        {
+            "element0": {
+                "origin": [
+                    10, 
+                    10
+                ], 
+                "width": 70, 
+                "location": "Body", 
+                "name": "RectangleForm", 
+                "height": 60
+            }
+        }, 
+        {
+            "element1": {
+                "origin": [
+                    10, 
+                    10
+                ], 
+                "width": 70, 
+                "location": "Body", 
+                "name": "RectangleForm", 
+                "height": 60
+            }
+        }
+    ], 
+    "Tail": [
+        {
+            "element2": {
+                "origin": [
+                    10, 
+                    10
+                ], 
+                "width": 50, 
+                "location": "Tail", 
+                "name": "RectangleForm", 
+                "height": 50
+            }
+        }, 
+        {
+            "element3": {
+                "origin": [
+                    10, 
+                    10
+                ], 
+                "width": 50, 
+                "location": "Tail", 
+                "name": "RectangleForm", 
+                "height": 50
+            }
+        }
+    ]
+}

@@ -1,9 +1,15 @@
+# systeme class
 import sys
+import logging
+
+# UI class
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
+
+# personnal class
 import rectangle_form
 import RenderAreaWidget
 
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
 
 class Example(QWidget):
     def __init__(self):
@@ -22,13 +28,15 @@ class Example(QWidget):
         splitterRadio.addWidget(self.radioBody)
         splitterRadio.addWidget(self.radioTail)
         splitterRadio.addWidget(self.radioNose)
-        self.halfSize = QRadioButton("Half", self)
-        self.normalSize = QRadioButton("Normal", self)
-        self.doubleSize = QRadioButton("Double", self)
-        splitterRadio2 = QSplitter(Qt.Horizontal)
-        splitterRadio2.addWidget(self.halfSize)
-        splitterRadio2.addWidget(self.normalSize)
-        splitterRadio2.addWidget(self.doubleSize)
+        self.sizeSlider = self.sliderCreation(min=0.5, max=3, value=1, interval=0.5)
+
+        #self.halfSize = QRadioButton("Half", self)
+        #self.normalSize = QRadioButton("Normal", self)
+        #self.doubleSize = QRadioButton("Double", self)
+        #splitterRadio2 = QSplitter(Qt.Horizontal)
+        #splitterRadio2.addWidget(self.halfSize)
+        #splitterRadio2.addWidget(self.normalSize)
+        #splitterRadio2.addWidget(self.doubleSize)
 
         # button definition and associated splitter
         addButton = QPushButton('Add', self)
@@ -44,11 +52,15 @@ class Example(QWidget):
 
         splitterButton = QSplitter(Qt.Horizontal)
         splitterButton.addWidget(splitterRadio)
-        splitterButton.addWidget(splitterRadio2)
+        #splitterButton.addWidget(splitterRadio2)
+
         splitterButton2 = QSplitter(Qt.Horizontal)
         splitterButton2.addWidget(addButton)
         splitterButton2.addWidget(removeButton)
         splitterButton2.addWidget(saveButton)
+
+        sliderArea = QSplitter(Qt.Horizontal)
+        sliderArea.addWidget(self.sizeSlider)
 
         ###################### third try with QTextObjectInterface object
         # self.drawarea = QStackedWidget(self)
@@ -61,6 +73,8 @@ class Example(QWidget):
         self.textedit.setFixedSize(800, 200)
         splitter1.addWidget(splitterButton)
         splitter1.addWidget(splitterButton2)
+        splitter1.addWidget(QLabel('Size Coefficient: '))
+        splitter1.addWidget(sliderArea)
         splitter1.addWidget(self.textedit)
         #splitter1.addWidget(self.drawarea)
         splitter1.addWidget(self.renderArea)
@@ -79,20 +93,37 @@ class Example(QWidget):
         self.setWindowTitle('QSplitter demo')
         self.show()
 
+    def sliderCreation(self, min, max, value, interval):
+        """define a slider with default values if parameter are not set"""
+        self.slider = QSlider(Qt.Horizontal)
+        self.slider.setMinimum(min)
+        self.slider.setMaximum(max)
+        self.slider.setValue(value)
+        self.slider.setTickPosition(QSlider.TicksBelow)
+        self.slider.setTickInterval(interval)
+        self.slider.valueChanged.connect(self.valueChange)
+        return self.slider
+
+    def valueChange(self):
+        sliderCoef = self.slider.value()
+        self.textedit.append("inside of slider: " + str(sliderCoef))
+        return sliderCoef
+
+
     def finalSize(self, objectSize):
         """will define the new size of object in regard of """
-        if self.halfSize.isChecked() == True:
-            coef = 0.5
-        if self.normalSize.isChecked() == True:
-            coef = 1
-        if self.doubleSize.isChecked() == True:
-            coef = 2
+        # list will be used to copy the list and not to refer at the same list
+        modifiedSize = list(objectSize)
+
         try:
-            for i in xrange(len(objectSize)):
-                objectSize[i]= objectSize[i]*coef
-            return objectSize
+            vc = self.valueChange()
+            modifiedSize = [o * vc for o in objectSize]
+            return modifiedSize
         except:
-            print ('function finalSizen, parameter objectSize not a list')
+            # configuration of the log file name
+            #logFileName = 'Validation_%s.log' % time.strftime('%y%m%d', time.localtime(time.time()))
+
+            logging.exception("function finalSize, parameter objectSize not a list")
 
 
     def addButtonFunc(self):
@@ -101,14 +132,14 @@ class Example(QWidget):
         if (self.radioBody.isChecked() == True):
             print 'in radio body selection'
             appliedSize = self.finalSize(self.__bodySize)
-            self.rectAdd = rectangle_form.RectangleForm(appliedSize[0], appliedSize[1], appliedSize[2], appliedSize[3], QColor(255, 0, 0))
             partShape = "Body"
+            self.rectAdd = rectangle_form.RectangleForm(appliedSize[0], appliedSize[1], appliedSize[2], appliedSize[3], partShape, QColor(255, 0, 0))
         if (self.radioNose.isChecked() == True):
-            self.rectAdd = rectangle_form.RectangleForm(10, 10, 40 , 60, QColor(255, 255, 0))
             partShape = "Nose"
+            self.rectAdd = rectangle_form.RectangleForm(10, 10, 40 , 60, partShape, QColor(255, 255, 0))
         if (self.radioTail.isChecked() == True):
-            self.rectAdd = rectangle_form.RectangleForm(10, 10, 50 , 50, QColor(0, 0, 255))
             partShape = "Tail"
+            self.rectAdd = rectangle_form.RectangleForm(10, 10, 50 , 50, partShape, QColor(0, 0, 255))
         rectAddTex = "a new rectangle form: %s" % (partShape)
         self.renderArea.addShape(self.rectAdd)
         self.textedit.append(rectAddTex)
@@ -119,7 +150,7 @@ class Example(QWidget):
     def saveButtonFunc(self):
         """action started after the press of add button"""
         print ("inside of the saveButton function")
-        # picklesave(renderArea
+        self.renderArea.toJson()
 
     def removeButtonFunc(self):
         """action started after the press of add button"""

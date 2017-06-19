@@ -1,4 +1,5 @@
 import sys
+import abc
 from PyQt4 import QtGui, QtCore
 
 class FormInterface(QtGui.QWidget):
@@ -9,6 +10,7 @@ class FormInterface(QtGui.QWidget):
         super(FormInterface, self).__init__()
         self._origin = None
         self._color = color
+        self._predatashape = {}
 
     ##############
     # painter definition
@@ -23,12 +25,12 @@ class FormInterface(QtGui.QWidget):
         self.addForm(self.qp)
         self.qp.end()
 
-
+    @abc.abstractmethod
     def createForm(self, form):
         """add the form defined by the class by using the Qpainter"""
         # rajouter un raise not implemented si fonction non utilise dans la classe
         # if this function is called directly by the mother class, an error message will appear
-        raise NotImplementedError()
+        return
 
     ##############
     # definition of form origin
@@ -37,18 +39,31 @@ class FormInterface(QtGui.QWidget):
     def origin(self):
         return self._origin
 
+    @abc.abstractmethod
+    def className(self):
+        """will return the name of the clase"""
+        return
+
+    @abc.abstractmethod
+    def predataShape(self):
+        """goal: define the different parameter of the shape in one dictionnary"""
+        return
+
 
     ################
     # move function
     ################
+    @abc.abstractmethod
     def isOver(self, x, y):
-        raise NotImplementedError()
+        return
 
+    @abc.abstractmethod
     def move(self, x, y):
-        raise NotImplementedError()
+        return
 
+    @abc.abstractmethod
     def shift(self, dx, dy):
-        raise NotImplementedError()
+        return
 
 
 class Selection(object):
@@ -66,29 +81,3 @@ class Selection(object):
         self.__shape.move(self._origin[0] + delta.x(), self._origin[1] + delta.y())
 
 
-
-    # def mouseDown(self, event):
-    #    "Operation a effectuer quand le bouton gauche de la souris est enfonce"
-    #    self.currObject = None
-    #    # event.x et event.y contiennent les coordonnees du clic effectue :
-    #    self.x1, self.y1 = event.x, event.y
-    #    # <find_closest> renvoie la reference du dessin le plus proche :
-    #    self.selObject = self.find_closest(self.x1, self.y1)
-    #    # modification de l epaisseur du contour du dessin :
-    #    self.itemconfig(self.selObject, width=2)
-    #    # <lift> fait passer le dessin a l'avant-plan :
-    #    self.lift(self.selObject)
-
-    # def mouseMove(self, event):
-    #    "Op. a effectuer quand la souris se deplace, bouton gauche enfonce"
-    #    x2, y2 = event.x, event.y
-    #    dx, dy = x2 - self.x1, y2 - self.y1
-    #    if self.selObject:
-    #        self.move(self.selObject, dx, dy)
-    #        self.x1, self.y1 = x2, y2
-
-    # def mouseUp(self, event):
-    #    "Op. a effectuer quand le bouton gauche de la souris est relache"
-    #    if self.selObject:
-    #        self.itemconfig(self.selObject, width=1)
-    #        self.selObject = None
