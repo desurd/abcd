@@ -1,3 +1,5 @@
+#! usr/bin/env python3
+
 # systeme class
 import sys
 import logging
