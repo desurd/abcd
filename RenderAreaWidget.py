@@ -1,3 +1,5 @@
+#! usr/bin/env python3
+
 # create a widget which will accept other widget inside
 
 import sys
@@ -110,4 +112,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+main()
+
+

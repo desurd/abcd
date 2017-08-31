@@ -1,3 +1,5 @@
+#! usr/bin/env python3
+
 import sys
 import abc
 from PyQt4 import QtGui, QtCore
