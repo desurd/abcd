@@ -1,22 +1,20 @@
-#! usr/bin/env python3
-
 # create a widget which will accept other widget inside
-
+import os
 import sys
 import json
-from PyQt4 import QtCore, QtGui, Qt
+from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 
-import abcdforminterface
-import rectangle_form
-import circleform
+import abcd.abcdforminterface
+from abcd.forms import rectangle_form
+from abcd.forms import circleform
 
 
 
-class RenderArea(QtGui.QWidget):
+class RenderArea(QtWidgets.QWidget):
 
     def __init__(self, parent= None):
         '''init part for the RenderArea'''
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         # liste of shapes element
         self.setAutoFillBackground(True)
         self.__palette= self.palette()
@@ -52,7 +50,7 @@ class RenderArea(QtGui.QWidget):
         pos = event.pos()
         for shape in self._shapes:
             if shape.isOver(pos.x(), pos.y()):
-                self._selected = abcdforminterface.Selection(shape, pos)
+                self._selected = abcd.abcdforminterface.Selection(shape, pos)
                 break
 
     def mouseMoveEvent(self, event):
@@ -80,10 +78,12 @@ class RenderArea(QtGui.QWidget):
 
     def toJson(self):
         """will save the different elements present in __shape to a json files"""
-        fileName= "first_save.json"
+        fileName= str(os.path.dirname(os.path.abspath(__file__))) +  "/first_save.json"
         tojson = {}
         # add a test if the file exist or not
         # if exist add a different opening file to append more data
+
+
         with open(fileName, 'w') as f:
             currentIndex = 0
             for shape in self._shapes:
@@ -96,6 +96,7 @@ class RenderArea(QtGui.QWidget):
 
     def jsonToLoad(self):
         """load a json file to the renderarea"""
+
 
 def main():
     app = QtGui.QApplication(sys.argv)
@@ -112,6 +113,4 @@ def main():
 
 
 if __name__ == '__main__':
-main()
-
-
+    main()

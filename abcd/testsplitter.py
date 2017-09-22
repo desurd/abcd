@@ -1,39 +1,43 @@
-#! usr/bin/env python3
-
 # systeme class
 import sys
 import logging
 
 # UI class
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
+#from PyQt4.QtGui import *
+#from PyQt4.QtCore import *
+# switch to pyqt5
+from PyQt5 import QtGui, QtCore
+from PyQt5 import QtWidgets
+
 
 # personnal class
-import rectangle_form
-import RenderAreaWidget
+import abcd.forms.rectangle_form
+import abcd.RenderAreaWidget
+import abcd.Reconciliation
 
 
-class Example(QWidget):
+
+class Example(QtWidgets.QWidget):
     def __init__(self):
         super(Example, self).__init__()
         self.initUI()
         self.__bodySize = [10, 10, 70, 60]
 
     def initUI(self):
-        self.hbox = QHBoxLayout(self)
+        self.hbox = QtWidgets.QHBoxLayout(self)
 
         # radio button definition
-        self.radioBody = QRadioButton("Body", self)
-        self.radioTail = QRadioButton("Tail", self)
-        self.radioNose = QRadioButton("Nose", self)
-        splitterRadio = QSplitter(Qt.Horizontal)
+        self.radioBody = QtWidgets.QRadioButton("Body", self)
+        self.radioTail = QtWidgets.QRadioButton("Tail", self)
+        self.radioNose = QtWidgets.QRadioButton("Nose", self)
+        splitterRadio = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
         splitterRadio.addWidget(self.radioBody)
         splitterRadio.addWidget(self.radioTail)
         splitterRadio.addWidget(self.radioNose)
         self.sizeSlider = self.sliderCreation(min=0.5, max=3, value=1, interval=0.5)
 
         #self.halfSize = QRadioButton("Half", self)
-        #self.normalSize = QRadioButton("Normal", self)
+        #self.normalSize = QRadioButton("Normal", self)/home/renault/.local/share/virtualenvs/abcd-oF17S63F/bin/activate
         #self.doubleSize = QRadioButton("Double", self)
         #splitterRadio2 = QSplitter(Qt.Horizontal)
         #splitterRadio2.addWidget(self.halfSize)
@@ -41,41 +45,46 @@ class Example(QWidget):
         #splitterRadio2.addWidget(self.doubleSize)
 
         # button definition and associated splitter
-        addButton = QPushButton('Add', self)
+        addButton = QtWidgets.QPushButton('Add', self)
         addButton.setToolTip('add a new slice')
         addButton.setFixedSize(110, 30)
 
-        removeButton = QPushButton('Remove', self)
+        removeButton = QtWidgets.QPushButton('Remove', self)
         removeButton.setToolTip('remove a slice')
         removeButton.setFixedSize(110, 30)
-        saveButton = QPushButton('Save', self)
+        saveButton = QtWidgets.QPushButton('Save', self)
         saveButton.setToolTip('Save a slice')
         saveButton.setFixedSize(110, 30)
+        loadButton = QtWidgets.QPushButton('Load', self)
+        loadButton.setToolTip('Load a config file')
+        loadButton.setFixedSize(110, 30)
 
-        splitterButton = QSplitter(Qt.Horizontal)
+
+        splitterButton = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
         splitterButton.addWidget(splitterRadio)
         #splitterButton.addWidget(splitterRadio2)
 
-        splitterButton2 = QSplitter(Qt.Horizontal)
+        splitterButton2 = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
         splitterButton2.addWidget(addButton)
         splitterButton2.addWidget(removeButton)
         splitterButton2.addWidget(saveButton)
+        splitterButton2.addWidget(loadButton)
 
-        sliderArea = QSplitter(Qt.Horizontal)
+        sliderArea = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
         sliderArea.addWidget(self.sizeSlider)
 
         ###################### third try with QTextObjectInterface object
         # self.drawarea = QStackedWidget(self)
-        self.renderArea = RenderAreaWidget.RenderArea()
+        self.renderArea = abcd.RenderAreaWidget.RenderArea()
         self.renderArea.setFixedSize(800, 700)
 
         # Splitter vertical
-        splitter1 = QSplitter(Qt.Vertical)
-        self.textedit=QTextEdit()
+        splitter1 = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        self.textedit=QtWidgets.QTextEdit()
         self.textedit.setFixedSize(800, 200)
         splitter1.addWidget(splitterButton)
         splitter1.addWidget(splitterButton2)
-        splitter1.addWidget(QLabel('Size Coefficient: '))
+        splitter1.addWidget(QtWidgets.QLabel('Size Coefficient: '))
         splitter1.addWidget(sliderArea)
         splitter1.addWidget(self.textedit)
         #splitter1.addWidget(self.drawarea)
@@ -84,12 +93,13 @@ class Example(QWidget):
         self.hbox.addWidget(splitter1)
         #self.hbox.addWidget(self.drawarea)
         self.setLayout(self.hbox)
-        QApplication.setStyle(QStyleFactory.create('Cleanlooks'))
+        QtWidgets.QApplication.setStyle(QtWidgets.QStyleFactory.create('Cleanlooks'))
 
         # connection des events
         addButton.clicked.connect(self.addButtonFunc)
         saveButton.clicked.connect(self.saveButtonFunc)
         removeButton.clicked.connect(self.removeButtonFunc)
+        loadButton.clicked.connect(self.loadButtonFunc)
 
         self.setGeometry(200, 200, 900, 900)
         self.setWindowTitle('QSplitter demo')
@@ -97,11 +107,11 @@ class Example(QWidget):
 
     def sliderCreation(self, min, max, value, interval):
         """define a slider with default values if parameter are not set"""
-        self.slider = QSlider(Qt.Horizontal)
+        self.slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.slider.setMinimum(min)
         self.slider.setMaximum(max)
         self.slider.setValue(value)
-        self.slider.setTickPosition(QSlider.TicksBelow)
+        self.slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.slider.setTickInterval(interval)
         self.slider.valueChanged.connect(self.valueChange)
         return self.slider
@@ -132,16 +142,16 @@ class Example(QWidget):
         """action started after the press of add button"""
         partShape = None
         if (self.radioBody.isChecked() == True):
-            print 'in radio body selection'
+            print('in radio body selection')
             appliedSize = self.finalSize(self.__bodySize)
             partShape = "Body"
-            self.rectAdd = rectangle_form.RectangleForm(appliedSize[0], appliedSize[1], appliedSize[2], appliedSize[3], partShape, QColor(255, 0, 0))
+            self.rectAdd = abcd.forms.rectangle_form.RectangleForm(appliedSize[0], appliedSize[1], appliedSize[2], appliedSize[3], partShape, QtGui.QColor(255, 0, 0))
         if (self.radioNose.isChecked() == True):
             partShape = "Nose"
-            self.rectAdd = rectangle_form.RectangleForm(10, 10, 40 , 60, partShape, QColor(255, 255, 0))
+            self.rectAdd = abcd.forms.rectangle_form.RectangleForm(10, 10, 40 , 60, partShape, QtGui.QColor(255, 255, 0))
         if (self.radioTail.isChecked() == True):
             partShape = "Tail"
-            self.rectAdd = rectangle_form.RectangleForm(10, 10, 50 , 50, partShape, QColor(0, 0, 255))
+            self.rectAdd = abcd.forms.rectangle_form.RectangleForm(10, 10, 50 , 50, partShape, QtGui.QColor(0, 0, 255))
         rectAddTex = "a new rectangle form: %s" % (partShape)
         self.renderArea.addShape(self.rectAdd)
         self.textedit.append(rectAddTex)
@@ -158,13 +168,22 @@ class Example(QWidget):
         """action started after the press of add button"""
         print ("inside of the removeButton function")
 
+
+    def loadButtonFunc(self):
+        """action started after the press of add button"""
+        print ("inside of the removeButton function")
+        reconciclass = Reconciliation()
+        print ("current value of listclass" + reconciclass.listClass())
+
+
+
     def mousePressEvent(self, event):
         """select the nearest current object"""
         if event.button() == Qt.LeftButton:
             self.textedit.append("left click")
 
 def main():
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     ex = Example()
     sys.exit(app.exec_())
 

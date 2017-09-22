@@ -1,10 +1,8 @@
-#! usr/bin/env python3
-
 import sys
 import abc
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 
-class FormInterface(QtGui.QWidget):
+class FormInterface(QtWidgets.QWidget):
     def __init__(self, color):
         """
         Initialize.
