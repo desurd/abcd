@@ -1,16 +1,14 @@
-#! usr/bin/env python3
-
 import sys
 import abc
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore
 
 #from abc_base import FormInterface
-from abcdforminterface import FormInterface
+from .. import abcdforminterface
 
-class RectangleForm(FormInterface):
+class RectangleForm(abcdforminterface.FormInterface):
     def __init__(self, x1, y1, width, height, location, color=QtGui.QColor(0, 0, 0)):
         #super(FormInterface, self).__init__()
-        FormInterface.__init__(self, color)
+        abcdforminterface.FormInterface.__init__(self, color)
         self.define(x1, y1, width, height, location)
 
     @property

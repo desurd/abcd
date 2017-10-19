@@ -1,13 +1,11 @@
-#! usr/bin/env python3
-
 import sys
 import abc
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore
 
 
-from abcdforminterface import FormInterface
+from .. import abcdforminterface
 
-class CircleForm(FormInterface):
+class CircleForm(abcdforminterface.FormInterface):
     def __init__(self, x1, y1, rx, ry, color=QtGui.QColor(0, 0, 0)):
         #super(FormInterface, self).__init__()
         FormInterface.__init__(self, color)
